@@ -1,9 +1,10 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
-		.setName('refresh roles')
-		.setDescription('Refresh custom roles.'),
+		.setName('refreshroles')
+		.setDescription('Refresh custom roles.')
+		.setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
 	async execute(interaction) {
         const Roles = [
             {
@@ -23,24 +24,26 @@ module.exports = {
             }
         ]
 
-		// for (let role of Roles) {
-		// 	const guild = interaction.guild
+		const guild = interaction.guild
+		const message = await guild.channels.cache
+			.get('1097955935428804699')
+			.messages.fetch("1097957268424773792");
 
-		// 	const roleElement = guild.roles.cache.find(
-		// 		r => r.id === role.ID
-		// 	)
+		const reactions = message.reactions.cache
 
-		// 	const member = await guild.members.fetch({ user: user.id, force: true })
+		for (let role of Roles) {
+			const reaction = reactions.find(r => r._emoji.id === role.emoji)
+			const reactionUsers = await reaction.users.fetch()
+			for (let user of reactionUsers) {
+				const member = await guild.members.fetch({ user: user.id, force: true })
 
-		// 	if (roleElement && !member.roles.cache.has(role.ID)) {
-		// 		await member.roles.add(role.ID , `Adding roles`)
-		// 		console.log(`Added ${role.name} to member ${user.id}`);
-		// 	}
-
-		// 	break;
-		// }
-		// interaction.user is the object representing the User who ran the command
-		// interaction.member is the GuildMember object, which represents the user in the specific guild
-		await interaction.reply(`WIP`);
+				if (!member.roles.cache.has(role.ID)) {
+					await member.roles.add(role.ID , `Adding roles`)
+					console.log(`Added ${role.name} to member ${user.id}`);
+				}
+			}
+		}
+		
+		await interaction.reply(`Custom roles refreshed!`);
 	},
 };
