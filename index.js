@@ -4,6 +4,18 @@ const { Client, Collection, Events, GatewayIntentBits, Partials } = require('dis
 require("dotenv").config()
 const token = process.env.TOKEN
 
+const express = require("express");
+const app = express();
+const port = 8080;
+
+app.get("/", function (req, res) {
+  res.send("Hello World!");
+});
+
+app.listen(port, function () {
+  console.log(`Example app listening on port ${port}!`);
+});
+
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions],
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
