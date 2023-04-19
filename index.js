@@ -16,6 +16,10 @@ app.listen(port, function () {
   console.log(`Example app listening on port ${port}!`);
 });
 
+setInterval(function() {
+    http.get("https://voikdiscordbot-voikiddo.b4a.run");
+}, 300000); // every 5 minutes (300000)
+
 const client = new Client({
 	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions],
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
