@@ -47,6 +47,19 @@ module.exports = {
 			}
 		}
 
+		const randomReply = async (message) => {
+			const Replies = [
+				"omg",
+				"D:",
+				"peepoShy",
+				"why :(",
+				"you're so cool peepoShy"
+			]
+
+			let random = Math.floor(Math.random() * Replies.length);
+			return message.reply(Replies[random]).catch(console.error)
+		}
+
 		if (message.mentions.has(process.env.CLIENT_ID)) {
 			const guild = message.guild
 			const member = await guild.members.fetch({ user: message.author.id, force: true })
@@ -54,6 +67,8 @@ module.exports = {
 			if (member.roles.cache.has('1015540320705978449')) {
 				await refreshRoles(guild)
 			}
+
+			return randomReply(message)
 		}
 	
 	}
