@@ -48,6 +48,7 @@ module.exports = {
 		}
 
 		const randomReply = async (message) => {
+			const author = message.guild.members._cache.find(e=>e.user.toString()===message.author.toString())
 			const Replies = [
 				"omg",
 				"D:",
@@ -58,7 +59,7 @@ module.exports = {
 				">:)",
 				"umm probably",
 				`${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}`,
-				`omg that's such a ${message.author.username} moment`,
+				`omg that's such a ${author.nickname} moment`,
 				"sorry :(",
 				"haha"
 			]
