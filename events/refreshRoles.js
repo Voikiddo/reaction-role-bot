@@ -57,7 +57,7 @@ module.exports = {
 				"YIPPEE",
 				">:)",
 				"umm probably",
-				Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+				`$Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)`,
 				`omg that's such a ${message.author.username} moment`,
 				"sorry :("
 			]
