@@ -67,7 +67,9 @@ module.exports = {
 			]
 
 			let random = Math.floor(Math.random() * Replies.length);
-			return message.reply(Replies[random]).catch(console.error)
+			return message.reply(Replies[random]).catch((error)=>{
+				if (!(error.rawError.code === '50013')) console.error(error)
+			})
 		}
 
 		if (message.mentions.has(process.env.CLIENT_ID)) {
