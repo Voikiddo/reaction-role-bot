@@ -59,7 +59,7 @@ module.exports = {
 				">:)",
 				"umm probably",
 				`${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}`,
-				`omg that's such a ${author.nickname? author.nickname : author.username} moment`,
+				`omg that's such a ${author.nickname? author.nickname : message.author.username} moment`,
 				"sorry :(",
 				"haha"
 			]
