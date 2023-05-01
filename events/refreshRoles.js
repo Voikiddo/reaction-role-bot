@@ -53,7 +53,13 @@ module.exports = {
 				"D:",
 				"peepoShy",
 				"why :(",
-				"you're so cool peepoShy"
+				"you're so cool peepoShy",
+				"YIPPEE",
+				">:)",
+				"umm probably",
+				Math.floor(Math.random() * Number.MAX_SAFE_INTEGER),
+				`omg that's such a ${message.author.username} moment`,
+				"sorry :("
 			]
 
 			let random = Math.floor(Math.random() * Replies.length);
