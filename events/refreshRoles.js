@@ -61,7 +61,9 @@ module.exports = {
 				`${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}`,
 				`omg that's such a ${author.nickname? author.nickname : message.author.username} moment`,
 				"sorry :(",
-				"haha"
+				"haha",
+				"yes",
+				"no"
 			]
 
 			let random = Math.floor(Math.random() * Replies.length);
