@@ -3,6 +3,8 @@ const { Events } = require('discord.js');
 module.exports = {
 	name: Events.MessageReactionRemove,
 	async execute(reaction, user) {
+        if(reaction.message.guild.id !== process.env.GUILD_ID) return;
+
 		// When a reaction is received, check if the structure is partial
         if (reaction.partial) {
             // If the message this reaction belongs to was removed, the fetching might result in an API error which should be handled

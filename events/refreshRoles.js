@@ -73,6 +73,8 @@ module.exports = {
 		}
 
 		if (message.mentions.has(process.env.CLIENT_ID)) {
+			if(reaction.message.guild.id !== process.env.GUILD_ID) return randomReply(message)
+
 			const guild = message.guild
 			const member = await guild.members.fetch({ user: message.author.id, force: true })
 
