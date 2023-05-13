@@ -1,23 +1,67 @@
 const fs = require('node:fs');
 const path = require('node:path');
-const { Client, Collection, Events, GatewayIntentBits, Partials } = require('discord.js');
+var bodyParser = require('body-parser')
+const { Client, Collection, GatewayIntentBits, Partials } = require('discord.js');
 require("dotenv").config()
-const token = process.env.TOKEN
+
+/* EXPRESS */
 
 const express = require("express");
+const { log } = require('node:console');
 const app = express();
 const port = 8080;
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.get("/", function (req, res) {
-  res.send("Hello World!");
+  res.send("Bot currently running :D");
 });
+
+app.get("/reactions", (req, res) => {
+	res.sendFile(__dirname + "/assets/responds.json")
+})
+
+app.post('/reactions', (req, res) => {
+	// auth
+	if (req.query.auth !== process.env.API_TOKEN) {
+		res.status(401).send("Unauthorized")
+		return
+	}
+
+	// only add response without trigger
+	let data = req.body;
+	console.log(data);
+	if (data.has_trigger === 'true') {
+		res.send('Data Received: ' + JSON.stringify(data) + ". Haven't coded it in yet sorry.");
+		return
+	}
+
+	// open file
+	const respondsJSONPath = path.join(__dirname, '/assets/responds.json');
+	let responses = JSON.parse(fs.readFileSync(respondsJSONPath))
+
+	// check if it already exists
+	if (responses.content.no_trigger.includes(data.response)) {
+		res.status(400).send("Response already exists!")
+		return
+	}
+
+	// add the response to file
+	responses.content.no_trigger.push(data.response)
+	fs.writeFileSync(respondsJSONPath, JSON.stringify(responses))
+
+	// success
+	res.send('Data Received: ' + JSON.stringify(data) + ". Data updated.");
+})
 
 app.listen(port, function () {
   console.log(`Example app listening on port ${port}!`);
 });
 
+/* DISCORDJS */
+
 const client = new Client({
-	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions],
+	intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMessageReactions],
 	partials: [Partials.Message, Partials.Channel, Partials.Reaction],
 });
 client.commands = new Collection();
@@ -51,4 +95,4 @@ for (const file of eventFiles) {
 	}
 }
 
-client.login(token);
+client.login(process.env.TOKEN);

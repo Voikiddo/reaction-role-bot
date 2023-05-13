@@ -1,4 +1,7 @@
 const { Events } = require('discord.js');
+const { log } = require('node:console');
+const fs = require('node:fs');
+const path = require('node:path');
 
 module.exports = {
 	name: Events.MessageCreate,
@@ -48,27 +51,53 @@ module.exports = {
 		}
 
 		const randomReply = async (message) => {
-			const author = message.guild.members._cache.find(e=>e.user.toString()===message.author.toString())
-			const Replies = [
-				"omg",
-				"D:",
-				"peepoShy",
-				"why :(",
-				"you're so cool peepoShy",
-				"YIPPEE",
-				">:)",
-				"umm probably",
-				`${Math.floor(Math.random() * Number.MAX_SAFE_INTEGER)}`,
-				`omg that's such a ${author.nickname? author.nickname : message.author.username} moment`,
-				"sorry :(",
-				"haha",
-				"yes",
-				"no"
-			]
+			const respondsJSONPath = path.join(__dirname, '../assets/responds.json');
+			const responds = JSON.parse(fs.readFileSync(respondsJSONPath)).content
 
-			let random = Math.floor(Math.random() * Replies.length);
-			return message.reply(Replies[random]).catch((error)=>{
+			let respondMessage
+
+			// has trigger
+			let fullMessage
+			if (message.partial) {
+				await message.fetch()
+					.then(m => {
+						fullMessage = m.content.toLowerCase();
+					})
+					.catch(error => {
+						console.log('Something went wrong when fetching the message: ', error);
+					});
+			} else {
+				fullMessage = message.content.toLowerCase();
+			}
+
+			for (let triggeredRespond of responds.has_trigger) {
+				const trigger = triggeredRespond.trigger
+				const odds = parseFloat(triggeredRespond.odds)
+				const respondContents = triggeredRespond.response
+
+				const rand = Math.random()
+				if (fullMessage.includes(trigger) && rand < odds) {
+					const rand2 = Math.random()
+					let randomIndex = Math.floor(rand2 * respondContents.length)
+					respondMessage = respondContents[randomIndex]
+				}
+			}
+
+			// no trigger
+			if (!respondMessage) {
+				const Replies = responds.no_trigger
+				let randomIndex = Math.floor(Math.random() * Replies.length)
+				respondMessage = Replies[randomIndex]
+			}
+
+			// replace
+			respondMessage.replaceAll('$number', Math.floor(Math.random() * Number.MAX_SAFE_INTEGER))
+			respondMessage.replaceAll('$author', author.nickname?author.nickname:message.author.username)
+
+			// responding
+			return message.reply(respondMessage).catch((error)=>{
 				if (!(error.rawError.code === '50013')) console.error(error)
+				else console.log("Someone tried to do @heyy without giving heyy permission kek")
 			})
 		}
 
@@ -82,7 +111,10 @@ module.exports = {
 				await refreshRoles(guild)
 			}
 
-			return randomReply(message)
+			return randomReply(message).catch((error)=>{
+				if (error.rawError && !(error.rawError.code === '50013')) console.error(error)
+				else console.error(error)
+			})
 		}
 	
 	}

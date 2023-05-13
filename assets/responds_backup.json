@@ -1,0 +1,47 @@
+{
+    "version": "2.0.1",
+    "content": {
+        "has_trigger": [
+            {
+                "trigger": "peepoShy",
+                "odds": "0.05",
+                "responds": ["you're one of us now :]"]
+            },
+            {
+                "trigger": "say yes or no",
+                "odds": "0.8",
+                "respond": [
+                    "D: yes",
+                    "D: no"
+                ]
+            },
+            {
+                "trigger": "hate",
+                "odds": "0.2",
+                "respond": ["screw you $author >:)"]
+            }
+        ],
+        "no_trigger": [
+            "omg",
+            "D:",
+            ":D",
+            "aww",
+            "peepoShy",
+            "why :(",
+            "you're so cool peepoShy",
+            "YIPPEE",
+            ">:)",
+            "umm probably",
+            "$number",
+            "omg that's such a $author moment",
+            "sorry :(",
+            "majj",
+            "haha",
+            "yes",
+            "no",
+            "you're not the one in control here :)",
+            "do you want some pats peepoShy",
+            "boop"
+        ]
+    }
+}
