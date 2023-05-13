@@ -91,6 +91,7 @@ module.exports = {
 			}
 
 			// replace
+			const author = message.guild.members._cache.find(e=>e.user.toString()===message.author.toString())
 			respondMessage.replaceAll('$number', Math.floor(Math.random() * Number.MAX_SAFE_INTEGER))
 			respondMessage.replaceAll('$author', author.nickname?author.nickname:message.author.username)
 
