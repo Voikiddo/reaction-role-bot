@@ -43,7 +43,7 @@ module.exports = {
 
 				for (let user of reactionUsers) {
 					if (!user[1]._roles.includes(role.ID)) {
-						await member.roles.add(role.ID , `Adding roles`)
+						await member.roles.add(role.ID , `Adding roles`).catch(err=>{console.error(err)})
                         console.log(`Added '${role.name}' to member '${user.id}' (role refresh)`);
 					}
 				}
