@@ -25,6 +25,11 @@ module.exports = {
 					name: 'Live Ping',
 					ID: '1098074736317186138',
 					emoji: '1093582195479822386'
+				},
+				{
+					name: 'Heyy Updates Ping',
+					ID: '1107002591755391060',
+					emoji: '1010148937769959456'
 				}
 			]
 
@@ -43,8 +48,14 @@ module.exports = {
 
 				for (let user of reactionUsers) {
 					if (!user[1]._roles.includes(role.ID)) {
-						await member.roles.add(role.ID , `Adding roles`).catch(err=>{console.error(err)})
-                        console.log(`Added '${role.name}' to member '${user.id}' (role refresh)`);
+						await user[1].roles.add(role.ID , `Adding roles`)
+						.then(()=>{
+							console.log(`Added '${role.name}' to member '${user[1].id}' (role refresh)`);
+						})
+						.catch(err=>{
+							console.error(err)
+							console.log(`Trouble adding '${role.name}' to member '${user[1].id}' (role refresh)`);
+						})
 					}
 				}
 			}
